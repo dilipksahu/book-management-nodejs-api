@@ -1,0 +1,29 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+
+dotenv.config();
+
+const app = express();
+
+app.use(bodyParser.json());
+
+const connectDB = async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URL);
+      console.log('Connected to MongoDB');
+    } catch (error) {
+      console.error('Error connecting to MongoDB', error);
+      process.exit(1); // Exit the process with failure
+    }
+  };
+connectDB();
+
+// app routes
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

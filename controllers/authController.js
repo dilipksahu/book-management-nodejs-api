@@ -1,8 +1,12 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { registerLoginValidation } = require("../utils/validate");
 
 exports.register = async (req, res) => {
+  const { error } = registerLoginValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
   const usernameExists = await User.findOne({ username: req.body.username });
   if (usernameExists)
     return res
@@ -27,12 +31,21 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+    const { error } = registerLoginValidation(req.body);
+    if (error) return res.status(400).send({success: false, message: error.details[0].message});
+    
   const user = await User.findOne({ username: req.body.username });
-  if (!user || !req.body.password) return res.status(400).send({ success: false, message:"Username or password is wrong"});
+  if (!user || !req.body.password)
+    return res
+      .status(400)
+      .send({ success: false, message: "Username or password is wrong" });
 
   const validPass = await bcrypt.compare(req.body.password, user.password);
-  if (!validPass) return res.status(400).send({ success: false, message:"Invalid password"});
+  if (!validPass)
+    return res
+      .status(400)
+      .send({ success: false, message: "Invalid password" });
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-  res.header("auth-token", token).send({ success: true, access_token:token});
+  res.header("auth-token", token).send({ success: true, access_token: token });
 };

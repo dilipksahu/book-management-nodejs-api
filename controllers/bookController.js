@@ -1,6 +1,9 @@
 const Book = require('../models/Book');
+const { bookValidation } = require('../utils/validate');
 
 exports.createBook = async (req, res) => {
+    const { error } = bookValidation(req.body);
+    if (error) return res.status(400).send({ success: false, message: error.details[0].message});
     
     const book = new Book({
       title: req.body.title,

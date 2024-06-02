@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
+const bookRoutes = require('./routes/bookRoutes');
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ connectDB();
 
 // app routes
 app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -5,7 +5,7 @@ const { registerLoginValidation } = require("../utils/validate");
 
 exports.register = async (req, res) => {
   const { error } = registerLoginValidation(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({success: false,message: error.details[0].message});
 
   const usernameExists = await User.findOne({ username: req.body.username });
   if (usernameExists)
@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
       user: user._id,
     });
   } catch (error) {
-    res.status(400).send({ success: false, error });
+    res.status(400).send({ success: false, message: error });
   }
 };
 
@@ -47,5 +47,5 @@ exports.login = async (req, res) => {
       .send({ success: false, message: "Invalid password" });
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-  res.header("auth-token", token).send({ success: true, access_token: token });
+  res.header("auth-token", token).send({ success: true,message: "Login successful", "auth-token": token });
 };

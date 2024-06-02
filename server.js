@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 const errorHandler = require('./utils/errorHandler');
+const swagger = require('./swagger');
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 
 app.use(errorHandler);
+
+swagger(app);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

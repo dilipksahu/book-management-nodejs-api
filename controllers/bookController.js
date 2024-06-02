@@ -17,6 +17,15 @@ exports.createBook = async (req, res) => {
       const savedBook = await book.save();
       res.json({success: true, data: savedBook});
     } catch (error) {
-      res.status(500).send({success: false, message: error});
+      res.status(500).send({success: false, message: error.message});
+    }
+};
+  
+exports.getAllBooks = async (req, res) => {
+    try {
+      const books = await Book.find();
+      res.json({success: true, data: books});
+    } catch (error) {
+      res.status(500).send({success: false, message: error.message});
     }
   };

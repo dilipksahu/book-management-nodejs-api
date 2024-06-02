@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
       user: user._id,
     });
   } catch (error) {
-    res.status(400).send({ success: false, message: error });
+    res.status(400).send({ success: false, message: error.message });
   }
 };
 

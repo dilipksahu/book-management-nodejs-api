@@ -28,4 +28,14 @@ exports.getAllBooks = async (req, res) => {
     } catch (error) {
       res.status(500).send({success: false, message: error.message});
     }
+};
+  
+exports.getBookById = async (req, res) => {
+    try {
+      const book = await Book.findById(req.params.id);
+      if (!book) return res.status(404).send({success: false, message: 'Book not found'});
+      res.json({success: true, data: book});
+    } catch (err) {
+      res.status(500).send({success: false, message: 'Server Error'});
+    }
   };

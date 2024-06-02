@@ -1,7 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-console.log("Testing");
 const app = require('../server'); // Adjust the path to your server file
 const User = require('../models/User'); // Adjust the path to your User model
 
@@ -9,12 +8,9 @@ dotenv.config({ path: '.env.test' });
 
 describe('Authentication API', () => {
   console.log('process.env.MONGODB_URL');
-console.log(process.env.MONGODB_URL);
+  console.log(process.env.MONGODB_URL);
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGODB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URL);
   });
 
   afterAll(async () => {

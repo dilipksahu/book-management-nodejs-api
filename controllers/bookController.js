@@ -38,4 +38,27 @@ exports.getBookById = async (req, res) => {
     } catch (err) {
       res.status(500).send({success: false, message: 'Server Error'});
     }
+};
+  
+exports.updateBook = async (req, res) => {
+    const { error } = bookValidation(req.body);
+    if (error) return res.status(400).send({success: false, message: error.details[0].message});
+  
+    try {
+      const book = await Book.findByIdAndUpdate(
+        req.params.id,
+        {
+          title: req.body.title,
+          author: req.body.author,
+          publishedDate: req.body.publishedDate,
+          summary: req.body.summary
+        },
+        { new: true }
+      );
+  
+      if (!book) return res.status(404).send({success: true, message: 'Book not found'});
+      res.json({success: true, message: "Book updated", data: book});
+    } catch (err) {
+      res.status(500).send({success: false, message: 'Server Error'});
+    }
   };
